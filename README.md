@@ -22,7 +22,7 @@ that I would use in real life.
 
 ## User Stories
 
-- As a user, I want to add a game to my library
+- As a user, I want to add many games to my library
 - As a user, I want to change the completion status of a game to completed
-- As a user, I want to select a game and see it's stats in detail
-- As a user, I want to view all of my games that I have completed
+- As a user, I want to change the play time of a game
+- As a user, I want to see if I have a game in my library
