@@ -19,3 +19,10 @@ that I would use in real life.
 - sort their list by completion status, system, playtime, or alphabetically
 - search for a specific game in the library
 - filter their library to display games meeting the filter criteria
+
+## User Stories
+
+- As a user, I want to add a game to my library
+- As a user, I want to change the completion status of a game to completed
+- As a user, I want to select a game and see it's stats in detail
+- As a user, I want to view all of my games that I have completed
