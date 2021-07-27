@@ -30,4 +30,11 @@ class GameListTest {
         assertFalse(testGameList.findGame("Super Mario Bros."));
     }
 
+    @Test
+    public void testReturnGame() {
+        Game g = new Game("Super Mario World", "SNES", "Completed", 10);
+        testGameList.addGame(g);
+        assertEquals(g, testGameList.returnGame("Super Mario World"));
+    }
+
 }

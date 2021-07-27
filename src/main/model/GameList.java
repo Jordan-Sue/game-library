@@ -27,6 +27,17 @@ public class GameList {
         return false;
     }
 
+    // REQUIRES: the game is in the list of games
+    // EFFECTS: returns the game with the given name
+    public Game returnGame(String name) {
+        for (Game x : games) {
+            if (x.getName().equals(name)) {
+                return x;
+            }
+        }
+        return null;
+    }
+
     // EFFECTS: returns the size of the list
     public int size() {
         return games.size();
