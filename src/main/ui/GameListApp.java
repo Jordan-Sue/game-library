@@ -22,14 +22,14 @@ public class GameListApp {
         boolean running = true;
         String userInput;
 
-        input = new Scanner(System.in);
+        init();
 
         System.out.println("\nWelcome to your Game Library");
 
         while (running) {
             showMainMenu();
 
-            userInput = input.nextLine();
+            userInput = input.next();
             userInput = userInput.toLowerCase();
 
             if (userInput.equals("q")) {
@@ -41,6 +41,13 @@ public class GameListApp {
 
         System.out.println("Quiting...");
 
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes the game list
+    private void init() {
+        gameLib = new GameList();
+        input = new Scanner(System.in);
     }
 
     // MODIFIES: this
@@ -75,16 +82,14 @@ public class GameListApp {
     // EFFECTS: adds a game to the game library
     private void startAddGame() {
         System.out.println("Enter the name of the game: ");
-        String name = input.nextLine();
-        if (gameLib.findGame(name)) {
-            System.out.println("You already added that game\n");
-            startAddGame();
-        } else {
+        String name = input.next();
+
+        if (!gameLib.findGame(name)) {
             System.out.println("Enter the system the game is on: ");
-            String system = input.nextLine();
+            String system = input.next();
 
             System.out.println("Enter your completion status: ");
-            String status = input.nextLine();
+            String status = input.next();
 
             System.out.println("Enter your play time: ");
             double playTime = input.nextDouble();
@@ -92,34 +97,42 @@ public class GameListApp {
             Game newGame = new Game(name, system, status, playTime);
             gameLib.addGame(newGame);
             System.out.println("Game added");
+        } else {
+            System.out.println("That game is already in your library");
         }
+
     }
 
-    // EFFECTS: finds a game and
+    // MODIFIES: this
+    // EFFECTS: finds a game and shows another menu
     private void startFindGame() {
         System.out.print("Enter the name of the game you wish to find: ");
-        String name = input.nextLine();
+        String name = input.next();
         if (gameLib.findGame(name)) {
             showGameMenu();
-            String userInput;
-
-            userInput = input.nextLine();
+            String userInput = input.next();
             processGameMenu(name, userInput);
+        } else {
+            System.out.println("That game is not in your library");
         }
 
     }
 
+    // EFFECTS: displays valid inputs for the game menu
     private void showGameMenu() {
         System.out.println("\nGame Menu");
         System.out.println("s -> edit completion status");
         System.out.println("p -> edit play time");
     }
 
+    // MODIFIES: this
+    // EFFECTS: executes a process based on the valid inputs from the game menu
     private void processGameMenu(String name, String i) {
         Game g = gameLib.returnGame(name);
         if (i.equals("s")) {
             System.out.println("Enter new completion status: ");
-            String status = input.nextLine();
+            String status;
+            status = input.next();
             g.changeStatus(status);
             System.out.println("Status changed");
         } else if (i.equals("p")) {

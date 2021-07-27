@@ -20,6 +20,9 @@ class GameListTest {
             testGameList.addGame(g);
         }
         assertEquals(10, testGameList.size());
+        for (int x = 0; x < 10; x++) {
+            assertTrue(testGameList.findGame(Integer.toString(x)));
+        }
     }
 
     @Test
@@ -35,6 +38,11 @@ class GameListTest {
         Game g = new Game("Super Mario World", "SNES", "Completed", 10);
         testGameList.addGame(g);
         assertEquals(g, testGameList.returnGame("Super Mario World"));
+    }
+
+    @Test
+    public void testReturnGameNull() {
+        assertNull(testGameList.returnGame("Mario Party"));
     }
 
 }
