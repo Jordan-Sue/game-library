@@ -42,6 +42,8 @@ class GameListTest {
 
     @Test
     public void testReturnGameNull() {
+        Game g = new Game("Super Mario World", "SNES", "Completed", 10);
+        testGameList.addGame(g);
         assertNull(testGameList.returnGame("Mario Party"));
     }
 
