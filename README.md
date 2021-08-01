@@ -26,3 +26,5 @@ that I would use in real life.
 - As a user, I want to change the completion status of a game to completed
 - As a user, I want to change the play time of a game
 - As a user, I want to see if I have a game in my library
+- As a user, I want to save my game library to a file 
+- As a user, I want to load my game library from a file
