@@ -20,22 +20,27 @@ public class GameList {
     // EFFECTS: returns true if the given game's name is in the list, false otherwise
     public boolean findGame(String name) {
         for (Game x : games) {
-            if (x.getName().equals(name)) {
+            if (x.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    // REQUIRES: the game is in the list of games
     // EFFECTS: returns the game with the given name
     public Game returnGame(String name) {
         for (Game x : games) {
-            if (x.getName().equals(name)) {
+            if (x.getName().equalsIgnoreCase(name)) {
                 return x;
             }
         }
         return null;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes the game at the given index
+    public void removeGame(String name) {
+        games.remove(returnGame(name));
     }
 
     // EFFECTS: returns the size of the list

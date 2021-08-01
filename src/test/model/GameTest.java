@@ -34,5 +34,4 @@ class GameTest {
     public void testGetSystem() {
         assertEquals("NES", testGame.getSystem());
     }
-
 }

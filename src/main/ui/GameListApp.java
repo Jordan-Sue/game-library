@@ -2,9 +2,10 @@ package ui;
 
 import model.*;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-// Class implementation based on Teller Project
+// Class implementation and structure based on Teller Project
 
 // Application for game library
 public class GameListApp {
@@ -29,7 +30,7 @@ public class GameListApp {
         while (running) {
             showMainMenu();
 
-            userInput = input.next();
+            userInput = input.nextLine();
             userInput = userInput.toLowerCase();
 
             if (userInput.equals("q")) {
@@ -40,7 +41,6 @@ public class GameListApp {
         }
 
         System.out.println("Quiting...");
-
     }
 
     // MODIFIES: this
@@ -82,14 +82,14 @@ public class GameListApp {
     // EFFECTS: adds a game to the game library
     private void startAddGame() {
         System.out.println("Enter the name of the game: ");
-        String name = input.next();
+        String name = input.nextLine();
 
         if (!gameLib.findGame(name)) {
             System.out.println("Enter the system the game is on: ");
-            String system = input.next();
+            String system = input.nextLine();
 
             System.out.println("Enter your completion status: ");
-            String status = input.next();
+            String status = input.nextLine();
 
             System.out.println("Enter your play time: ");
             double playTime = input.nextDouble();
@@ -97,25 +97,24 @@ public class GameListApp {
             Game newGame = new Game(name, system, status, playTime);
             gameLib.addGame(newGame);
             System.out.println("Game added");
+            String temp = input.nextLine();
         } else {
             System.out.println("That game is already in your library");
         }
-
     }
 
     // MODIFIES: this
     // EFFECTS: finds a game and shows another menu
     private void startFindGame() {
         System.out.print("Enter the name of the game you wish to find: ");
-        String name = input.next();
+        String name = input.nextLine();
         if (gameLib.findGame(name)) {
             showGameMenu();
-            String userInput = input.next();
+            String userInput = input.nextLine();
             processGameMenu(name, userInput);
         } else {
             System.out.println("That game is not in your library");
         }
-
     }
 
     // EFFECTS: displays valid inputs for the game menu
@@ -137,9 +136,16 @@ public class GameListApp {
             System.out.println("Status changed");
         } else if (i.equals("p")) {
             System.out.println("Enter new play time: ");
-            double playTime = input.nextDouble();
-            g.changePlayTime(playTime);
-            System.out.println("Play time changed");
+            try {
+                double playTime = input.nextDouble();
+                g.changePlayTime(playTime);
+                System.out.println("Play time changed");
+                String temp = input.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Enter a valid number");
+                String temp = input.nextLine();
+                processGameMenu(name, i);
+            }
         } else {
             System.out.println("\"" + i + "\"" + " is not a valid command");
         }

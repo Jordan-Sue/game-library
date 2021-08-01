@@ -47,4 +47,11 @@ class GameListTest {
         assertNull(testGameList.returnGame("Mario Party"));
     }
 
+    @Test
+    public void testRemoveGame() {
+        Game g = new Game("Super Mario World", "SNES", "Completed", 10);
+        testGameList.addGame(g);
+        testGameList.removeGame("Super Mario World");
+        assertEquals(0, testGameList.size());
+    }
 }
