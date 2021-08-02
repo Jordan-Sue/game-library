@@ -62,6 +62,7 @@ public class GameLibrary implements Writable {
         return json;
     }
 
+    // EFFECTS: returns games in this GameLibrary as a JSON array
     public JSONArray libToJson() {
         JSONArray jsonArray = new JSONArray();
 
