@@ -1,0 +1,14 @@
+{"Game Library": [
+    {
+        "system": "NES",
+        "name": "Super Mario Bros.",
+        "playTime": 0,
+        "status": "Not_Played"
+    },
+    {
+        "system": "Steam",
+        "name": "Celeste",
+        "playTime": 276,
+        "status": "Beaten"
+    }
+]}

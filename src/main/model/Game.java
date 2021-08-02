@@ -1,16 +1,21 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
+// JSON related methods based on JsonSerializationDemo
+
 // Represents a game that has a name, a system, a completion status, and a play time
-public class Game {
+public class Game implements Writable {
     private String name;
     private String system;
-    private String status;
+    private Status status;
     private double playTime;
 
-    // REQUIRES: name and system are not an empty string; status is one of the strings: Not Played, Played, Beaten,
+    // REQUIRES: name and system are not an empty string; status is one of the enum: Not_Played, Played, Beaten,
     //           or Completed; playTime must be >= 0.
     // EFFECTS: sets the given parameters to the appropriate variables
-    public Game(String name, String system, String status, double playTime) {
+    public Game(String name, String system, Status status, double playTime) {
         this.name = name;
         this.system = system;
         this.status = status;
@@ -20,8 +25,8 @@ public class Game {
     // REQUIRES: newStatus must be one of the strings: Not Played, Played, Beaten, Completed
     // MODIFIES: this
     // EFFECTS: changes the current status of the game to the given status
-    public void changeStatus(String newStatus) {
-        status = newStatus;
+    public void changeStatus(Status status) {
+        this.status = status;
     }
 
     // REQUIRES: newPlayTime must be >= 0
@@ -42,12 +47,23 @@ public class Game {
     }
 
     // EFFECTS: returns the completion status of the game
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     // EFFECTS: returns the play time of the game
     public double getPlayTime() {
         return playTime;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("system", system);
+        json.put("status", status);
+        json.put("playTime", playTime);
+
+        return json;
     }
 }

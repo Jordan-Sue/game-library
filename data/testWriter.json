@@ -1,0 +1,14 @@
+{"Game Library": [
+    {
+        "system": "SNES",
+        "name": "Super Metroid",
+        "playTime": 1.9,
+        "status": "Completed"
+    },
+    {
+        "system": "Switch",
+        "name": "Breath of the Wild",
+        "playTime": 220,
+        "status": "Beaten"
+    }
+]}

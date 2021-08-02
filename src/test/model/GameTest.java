@@ -10,13 +10,13 @@ class GameTest {
 
     @BeforeEach
     public void runBefore() {
-        testGame = new Game("Super Mario Bros.", "NES", "Not Played", 0);
+        testGame = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
     }
 
     @Test
     public void testChangeStatus() {
-        testGame.changeStatus("Beaten");
-        assertEquals("Beaten", testGame.getStatus());
+        testGame.changeStatus(Status.Beaten);
+        assertEquals(Status.Beaten, testGame.getStatus());
     }
 
     @Test
