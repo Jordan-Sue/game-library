@@ -90,7 +90,7 @@ public class GameLibraryApp {
         System.out.println("r -> remove a game");
         System.out.println("f -> find a game");
         System.out.println("s -> save Game Library");
-        System.out.println("l -> load game Library");
+        System.out.println("l -> load Game Library");
         System.out.println("q -> quit");
     }
 
