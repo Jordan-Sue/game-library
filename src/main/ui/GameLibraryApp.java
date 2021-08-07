@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 // Application for game library
 public class GameLibraryApp {
-    private static final String JSON_STORE = "./data/gamelibrary.json";
+    private static final String JSON_STORE = "./data/gameLibrary.json";
     private GameLibrary gameLib;
     private Scanner input;
     private JsonWriter jsonWriter;
@@ -61,8 +61,8 @@ public class GameLibraryApp {
 
     // MODIFIES: this
     // EFFECTS: executes a process based on user input
-    private void processMainMenu(String i) {
-        switch (i) {
+    private void processMainMenu(String userInput) {
+        switch (userInput) {
             case "a":
                 startAddGame();
                 break;
@@ -77,8 +77,9 @@ public class GameLibraryApp {
                 break;
             case "l":
                 startLoadGameLibrary();
+                break;
             default:
-                System.out.println("\"" + i + "\"" + " is not a valid command");
+                System.out.println("\"" + userInput + "\"" + " is not a valid command");
                 break;
         }
     }
@@ -104,8 +105,8 @@ public class GameLibraryApp {
             System.out.println("\nEnter the system the game is on:");
             String system = input.nextLine();
 
-            showInputMenu();
-            Status status = processInputMenu();
+            showStatusMenu();
+            Status status = processStatusMenu();
 
             System.out.println("\nEnter your play time:");
             Game newGame = new Game(name, system, status, 0);
@@ -119,7 +120,7 @@ public class GameLibraryApp {
     }
 
     // EFFECTS: displays valid inputs for completion statuses
-    private void showInputMenu() {
+    private void showStatusMenu() {
         System.out.println("\nChoose your completion status:");
         System.out.println("1: Not Played");
         System.out.println("2: Played");
@@ -129,7 +130,7 @@ public class GameLibraryApp {
 
     // EFFECTS: returns the status that was chosen,
     //          otherwise tells the user the choice was invalid and lets them pick again
-    private Status processInputMenu() {
+    private Status processStatusMenu() {
         String choice = input.nextLine();
         switch (choice) {
             case "1":
@@ -142,7 +143,7 @@ public class GameLibraryApp {
                 return Status.Completed;
             default:
                 System.out.println("Not a valid choice");
-                processInputMenu();
+                processStatusMenu();
         }
         return null;
     }
@@ -157,7 +158,7 @@ public class GameLibraryApp {
             System.out.println(gameLib.returnGame(game).getName() + " was removed");
             gameLib.removeGame(game);
         } else {
-            System.out.println("That game doesn't exist in you library");
+            System.out.println("That game doesn't exist in your library");
         }
     }
 
@@ -168,8 +169,7 @@ public class GameLibraryApp {
         String name = input.nextLine();
         if (gameLib.findGame(name)) {
             showGameMenu();
-            String userInput = input.nextLine();
-            processGameMenu(name, userInput);
+            processGameMenu(name);
         } else {
             System.out.println("That game is not in your library");
         }
@@ -184,9 +184,10 @@ public class GameLibraryApp {
     }
 
     // EFFECTS: executes a process based on the valid inputs from the game menu
-    private void processGameMenu(String name, String i) {
+    private void processGameMenu(String name) {
+        String userInput = input.nextLine();
         Game game = gameLib.returnGame(name);
-        switch (i) {
+        switch (userInput.toLowerCase()) {
             case "s":
                 startChangeStatus(game);
                 break;
@@ -196,18 +197,18 @@ public class GameLibraryApp {
                 System.out.println("Play time changed");
                 break;
             case "b":
-                return;
-            default:
-                System.out.println("\"" + i + "\"" + " is not a valid command");
                 break;
+            default:
+                System.out.println("\"" + userInput + "\"" + " is not a valid command");
+                processGameMenu(name);
         }
     }
 
     // MODIFIES: game
     // EFFECTS: changes the status of the given game
     private void startChangeStatus(Game game) {
-        showInputMenu();
-        game.changeStatus(processInputMenu());
+        showStatusMenu();
+        game.changeStatus(processStatusMenu());
         System.out.println("Status changed");
     }
 
@@ -243,7 +244,6 @@ public class GameLibraryApp {
         try {
             gameLib = jsonReader.read();
             System.out.println("Successfully loaded Game Library from " + JSON_STORE);
-            input.nextLine();
         } catch (IOException e) {
             System.out.println("Unable to load from the file " + JSON_STORE);
         }
