@@ -1,251 +1,188 @@
 package ui;
 
+import exceptions.NegativePlayTimeException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import ui.buttons.*;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
-// Class implementation and structure based on Teller Project, JSON based on JsonSerializationDemo
+// Class implementation based on SimpleDrawingPlayerComplete
 
-// Application for game library
-public class GameLibraryApp {
+// Visual application for game library
+public class GameLibraryApp extends JFrame {
+
     private static final String JSON_STORE = "./data/gameLibrary.json";
+    public static final int WIDTH = 854;
+    public static final int HEIGHT = 480;
+
+    private JPanel panel;
     private GameLibrary gameLib;
-    private Scanner input;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    // EFFECTS: runs the game library application
+    // EFFECTS: runs the visual game library application
     public GameLibraryApp() {
-        runGameList();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: executes appropriate action based on user input
-    private void runGameList() {
-        boolean running = true;
-        String userInput;
-
+        super("Game Library");
         init();
-
-        System.out.println("\nWelcome to your Game Library");
-
-        while (running) {
-            showMainMenu();
-
-            userInput = input.nextLine();
-            userInput = userInput.toLowerCase();
-
-            if (userInput.equals("q")) {
-                running = false;
-            } else {
-                processMainMenu(userInput);
-            }
-        }
-
-        System.out.println("\nQuiting...");
+        initializeGraphics();
+        initializeMainMenu();
+        setVisible(true);
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes the game list
+    // EFFECTS: initializes the game library
     private void init() {
+        panel = new JPanel();
         gameLib = new GameLibrary();
-        input = new Scanner(System.in);
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
     }
 
     // MODIFIES: this
-    // EFFECTS: executes a process based on user input
-    private void processMainMenu(String userInput) {
-        switch (userInput) {
-            case "a":
-                startAddGame();
-                break;
-            case "r":
-                startRemoveGame();
-                break;
-            case "f":
-                startFindGame();
-                break;
-            case "s":
-                startSaveGameLibrary();
-                break;
-            case "l":
-                startLoadGameLibrary();
-                break;
-            default:
-                System.out.println("\"" + userInput + "\"" + " is not a valid command");
-                break;
-        }
-    }
-
-    // EFFECTS: displays the valid inputs to the user
-    private void showMainMenu() {
-        System.out.println("\nMain Menu");
-        System.out.println("a -> add a game");
-        System.out.println("r -> remove a game");
-        System.out.println("f -> find a game");
-        System.out.println("s -> save Game Library");
-        System.out.println("l -> load Game Library");
-        System.out.println("q -> quit");
+    // EFFECTS: draws the JFrame window where this GameLibrary will operate
+    private void initializeGraphics() {
+        setLayout(new BorderLayout());
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Have to change for pop up "are you sure?" ???
+        setLocationRelativeTo(null);
+//        addComponentListener(new ComponentAdapter() {
+//            public void componentResized(ComponentEvent componentEvent) {
+//                System.out.println("I think");
+//                System.out.println(getWidth());
+//                System.out.println(getHeight());
+//            }
+//        });
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a game to the game library
-    private void startAddGame() {
-        System.out.println("\nEnter the name of the game:");
-        String name = input.nextLine();
+    // EFFECTS: creates the buttons for the main menu
+    private void initializeMainMenu() {
+        panel.setLayout(new GridLayout(3, 2, getWidth() / 16, getHeight() / 16));
+        panel.setPreferredSize(new Dimension(getWidth() / 2, getHeight() / 2));
 
-        if (!gameLib.findGame(name)) {
-            System.out.println("\nEnter the system the game is on:");
-            String system = input.nextLine();
+        new AddButton(this, panel, "Add Game");
 
-            showStatusMenu();
-            Status status = processStatusMenu();
+        new RemoveButton(this, panel, "Remove Game");
 
-            System.out.println("\nEnter your play time:");
-            Game newGame = new Game(name, system, status, 0);
-            startChangePlayTime(newGame);
+        new FindButton(this, panel, "Find Game");
 
-            gameLib.addGame(newGame);
-            System.out.println("Game added");
-        } else {
-            System.out.println("That game is already in your library");
-        }
+        new ExploreButton(this, panel, "Explore Your Library");
+
+        new SaveButton(this, panel, "Save");
+
+        new LoadButton(this, panel, "Load");
+
+        panel.setVisible(true);
+        add(panel, BorderLayout.SOUTH);
     }
 
-    // EFFECTS: displays valid inputs for completion statuses
-    private void showStatusMenu() {
-        System.out.println("\nChoose your completion status:");
-        System.out.println("1: Not Played");
-        System.out.println("2: Played");
-        System.out.println("3: Beaten");
-        System.out.println("4: Completed");
-    }
+    // EFFECTS: creates the pop-up dialogue box to add a game to the library
+    public void addGameDialogueBox() {
+        Status [] statuses = { Status.Not_Played, Status.Beaten, Status.Played, Status.Completed };
+        JComboBox<Status> statusInput = new JComboBox<>(statuses);
+        JTextField nameInput = new JTextField();
+        JTextField systemInput = new JTextField();
+        JTextField playTimeInput = new JTextField();
 
-    // EFFECTS: returns the status that was chosen,
-    //          otherwise tells the user the choice was invalid and lets them pick again
-    private Status processStatusMenu() {
-        String choice = input.nextLine();
-        switch (choice) {
-            case "1":
-                return Status.Not_Played;
-            case "2":
-                return Status.Played;
-            case "3":
-                return Status.Beaten;
-            case "4":
-                return Status.Completed;
-            default:
-                System.out.println("Not a valid choice");
-                processStatusMenu();
-        }
-        return null;
+        JPanel addPanel = new JPanel(new GridLayout(0, 1));
+
+        addPanel.add(new JLabel("Name"));
+        addPanel.add(nameInput);
+
+        addPanel.add(new JLabel("System"));
+        addPanel.add(systemInput);
+
+        addPanel.add(new JLabel("Status"));
+        addPanel.add(statusInput);
+
+        addPanel.add(new JLabel("Play Time"));
+        addPanel.add(playTimeInput);
+
+        int option = JOptionPane.showConfirmDialog(this,
+                addPanel,
+                "Enter the details of the game you wish to add",
+                JOptionPane.OK_CANCEL_OPTION);
+        processAddGame(option, nameInput, systemInput, statusInput, playTimeInput);
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a game from the game library,
-    //          otherwise the user is told the game is not in the library
-    private void startRemoveGame() {
-        System.out.println("\nWhich game do you want to remove?");
-        String game = input.nextLine();
-        if (gameLib.findGame(game)) {
-            System.out.println(gameLib.returnGame(game).getName() + " was removed");
-            gameLib.removeGame(game);
-        } else {
-            System.out.println("That game doesn't exist in your library");
+    // EFFECTS: processes the inputs from the addGameDialogueBox and adds the game to the gameLibrary
+    private void processAddGame(int option, JTextField nameInput, JTextField systemInput,
+                                JComboBox<Status> statusInput, JTextField playTimeInput) {
+        if (option == JOptionPane.OK_OPTION) {
+            try {
+                String name = nameInput.getText();
+                String system = systemInput.getText();
+                Status status = (Status) statusInput.getSelectedItem();
+                double playTime = Double.parseDouble(playTimeInput.getText());
+                gameLib.addGame(new Game(name, system, status, playTime));
+                if (playTime < 0) {
+                    throw new NegativePlayTimeException();
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "You did not enter a valid number for play time",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (NegativePlayTimeException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Cannot enter a negative play time",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: finds a game and shows another menu
-    private void startFindGame() {
-        System.out.print("\nEnter the name of the game you wish to find:\n");
-        String name = input.nextLine();
-        if (gameLib.findGame(name)) {
-            showGameMenu();
-            processGameMenu(name);
-        } else {
-            System.out.println("That game is not in your library");
-        }
+    // EFFECTS: removes a game from the game library
+    public void removeGame() {
+        System.out.println("I can't remove");
     }
 
-    // EFFECTS: displays valid inputs for the game menu
-    private void showGameMenu() {
-        System.out.println("\nGame Menu");
-        System.out.println("s -> edit completion status");
-        System.out.println("p -> edit play time");
-        System.out.println("b -> back to main menu");
+    // EFFECTS: finds a game
+    public void findGame() {
+        System.out.println("I can't find");
     }
 
-    // EFFECTS: executes a process based on the valid inputs from the game menu
-    private void processGameMenu(String name) {
-        String userInput = input.nextLine();
-        Game game = gameLib.returnGame(name);
-        switch (userInput.toLowerCase()) {
-            case "s":
-                startChangeStatus(game);
-                break;
-            case "p":
-                System.out.println("\nEnter new play time:");
-                startChangePlayTime(game);
-                System.out.println("Play time changed");
-                break;
-            case "b":
-                break;
-            default:
-                System.out.println("\"" + userInput + "\"" + " is not a valid command");
-                processGameMenu(name);
-        }
-    }
-
-    // MODIFIES: game
-    // EFFECTS: changes the status of the given game
-    private void startChangeStatus(Game game) {
-        showStatusMenu();
-        game.changeStatus(processStatusMenu());
-        System.out.println("Status changed");
-    }
-
-    // MODIFIES: game
-    // EFFECTS: changes the playTime of the given game
-    private void startChangePlayTime(Game game) {
-        try {
-            double playTime = input.nextDouble();
-            game.changePlayTime(playTime);
-            input.nextLine();
-        } catch (InputMismatchException e) {
-            System.out.println("Enter a valid number");
-            input.nextLine();
-            startChangePlayTime(game);
-        }
+    // MODIFIES: this
+    // EFFECTS: displays all the games in the game library
+    public void exploreLibrary() {
+        System.out.println("I can't explore");
     }
 
     // EFFECTS: saves current GameLibrary to a JSON file
-    private void startSaveGameLibrary() {
+    public void saveGameLibrary() {
         try {
             jsonWriter.open();
             jsonWriter.write(gameLib);
             jsonWriter.close();
-            System.out.println("Saved Game Library to " + JSON_STORE);
+            JOptionPane.showMessageDialog(this, "Saved Game Library to " + JSON_STORE);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to the file " + JSON_STORE);
+            JOptionPane.showMessageDialog(this,
+                    "Unable to write to the file " + JSON_STORE,
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
     // MODIFIES: this
     // EFFECTS: loads a GameLibrary from a file
-    private void startLoadGameLibrary() {
+    public void loadGameLibrary() {
         try {
             gameLib = jsonReader.read();
-            System.out.println("Successfully loaded Game Library from " + JSON_STORE);
+            JOptionPane.showMessageDialog(this, "Successfully loaded Game Library from " + JSON_STORE);
         } catch (IOException e) {
-            System.out.println("Unable to load from the file " + JSON_STORE);
+            JOptionPane.showMessageDialog(this,
+                    "Unable to load from the file " + JSON_STORE,
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

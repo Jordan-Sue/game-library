@@ -10,5 +10,11 @@
         "name": "Celeste",
         "playTime": 276,
         "status": "Beaten"
+    },
+    {
+        "system": "SNES",
+        "name": "The Legend of Zelda, A Link to the Past",
+        "playTime": 5.6,
+        "status": "Completed"
     }
 ]}
