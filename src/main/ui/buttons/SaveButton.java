@@ -9,11 +9,8 @@ import java.awt.event.ActionListener;
 
 public class SaveButton extends Button {
 
-    private GameLibraryApp gameLibApp;
-
     public SaveButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
         super(gameLibraryApp, panel, name);
-        gameLibApp = gameLibraryApp;
     }
 
     @Override

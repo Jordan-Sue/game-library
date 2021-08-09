@@ -9,11 +9,8 @@ import java.awt.event.ActionListener;
 
 public class ExploreButton extends Button {
 
-    private GameLibraryApp gameLibApp;
-
     public ExploreButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
         super(gameLibraryApp, panel, name);
-        gameLibApp = gameLibraryApp;
     }
 
     @Override

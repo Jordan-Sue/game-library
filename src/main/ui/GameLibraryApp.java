@@ -51,20 +51,13 @@ public class GameLibraryApp extends JFrame {
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Have to change for pop up "are you sure?" ???
         setLocationRelativeTo(null);
-//        addComponentListener(new ComponentAdapter() {
-//            public void componentResized(ComponentEvent componentEvent) {
-//                System.out.println("I think");
-//                System.out.println(getWidth());
-//                System.out.println(getHeight());
-//            }
-//        });
     }
 
     // MODIFIES: this
     // EFFECTS: creates the buttons for the main menu
     private void initializeMainMenu() {
         panel.setLayout(new GridLayout(3, 2, getWidth() / 16, getHeight() / 16));
-        panel.setPreferredSize(new Dimension(getWidth() / 2, getHeight() / 2));
+        panel.setPreferredSize(new Dimension(getWidth(), getHeight() / 2));
 
         new AddButton(this, panel, "Add Game");
 
@@ -78,7 +71,6 @@ public class GameLibraryApp extends JFrame {
 
         new LoadButton(this, panel, "Load");
 
-        panel.setVisible(true);
         add(panel, BorderLayout.SOUTH);
     }
 
@@ -273,9 +265,43 @@ public class GameLibraryApp extends JFrame {
     // MODIFIES: this
     // EFFECTS: displays all the games in the GameLibrary
     public void exploreLibrary() {
-        JScrollPane scrollPane = new JScrollPane();
-        add(scrollPane);
-        scrollPane.setVisible(true);
+        setVisible(false);
+        JFrame exploreFrame = new JFrame();
+        exploreFrame.setLayout(new BorderLayout());
+        exploreFrame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        exploreFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        exploreFrame.setLocationRelativeTo(null);
+
+        Object[][] games = gameLib.getGamesInfo();
+        String[] columnNames = { "Name", "System", "Completion Status", "Playtime" };
+        JTable gameLibTable = new JTable(games, columnNames);
+        gameLibTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        JScrollPane scrollPane = new JScrollPane(gameLibTable);
+        Dimension size = new Dimension(exploreFrame.getWidth(),
+                (exploreFrame.getHeight() - (exploreFrame.getHeight() / 4)));
+        scrollPane.setPreferredSize(size);
+
+        JPanel explorePanel = new JPanel();
+        new SortButton(this, explorePanel, "Sort");
+        new StatsButton(this, explorePanel, "Stats");
+
+        JSplitPane explorePane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, explorePanel);
+        explorePane.setDividerLocation(exploreFrame.getHeight() / 2);
+
+        exploreFrame.add(explorePane);
+        exploreFrame.setVisible(true);
+    }
+
+    // MODIFIES: explorePane
+    // EFFECTS: sorts the list of games displayed
+    public void sortGameLib() {
+
+    }
+
+    // MODIFIES: exploreFrame
+    // EFFECTS: displays a graph of the games based on completion status
+    public void showStats() {
+
     }
 
     // MODIFIES: this

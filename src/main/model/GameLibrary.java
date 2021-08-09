@@ -61,6 +61,22 @@ public class GameLibrary implements Writable {
         return gameLib.size();
     }
 
+    // EFFECTS: returns an object array of object arrays of the 4 game parameters: name, system, status, and play time
+    public Object[][] getGamesInfo() {
+        Object[][] games = new Object[gameLib.size()][];
+        int counter = 0;
+        for (Game g : gameLib) {
+            Object[] stats = new Object[4];
+            stats[0] = g.getName();
+            stats[1] = g.getSystem();
+            stats[2] = String.valueOf(g.getStatus());
+            stats[3] = String.valueOf(g.getPlayTime());
+            games[counter] = stats;
+            counter += 1;
+        }
+        return games;
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

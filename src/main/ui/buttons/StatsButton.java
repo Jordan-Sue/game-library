@@ -3,14 +3,13 @@ package ui.buttons;
 import ui.GameLibraryApp;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FindButton extends Button {
+public class StatsButton extends Button {
 
-    public FindButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
-        super(gameLibraryApp,panel, name);
+    public StatsButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
+        super(gameLibraryApp, panel, name);
     }
 
     @Override
@@ -18,7 +17,7 @@ public class FindButton extends Button {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameLibApp.findGame();
+                gameLibApp.showStats();
             }
         });
     }

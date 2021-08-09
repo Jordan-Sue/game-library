@@ -11,9 +11,12 @@ public abstract class Button {
 
     protected JButton button;
     protected Dimension size;
+    protected GameLibraryApp gameLibApp;
+
 
     // EFFECTS: creates a button with a name and places it on the given panel
     public Button(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
+        gameLibApp = gameLibraryApp;
         button = new JButton(name);
         size = button.getPreferredSize();
         button.setActionCommand(name.toLowerCase());

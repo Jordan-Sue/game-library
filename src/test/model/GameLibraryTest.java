@@ -61,4 +61,21 @@ class GameLibraryTest {
         testGameLibrary.removeGame(g);
         assertEquals(0, testGameLibrary.size());
     }
+
+    @Test
+    public void testGetGamesInfo() {
+        Game g1 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
+        Game g2 = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        testGameLibrary.addGame(g1);
+        testGameLibrary.addGame(g2);
+        Object[][] testObject = testGameLibrary.getGamesInfo();
+        assertEquals(testObject[0][0], "Super Mario Bros.");
+        assertEquals(testObject[0][1], "NES");
+        assertEquals(testObject[0][2], "Not_Played");
+        assertEquals(testObject[0][3], "0.0");
+        assertEquals(testObject[1][0], "Super Mario World");
+        assertEquals(testObject[1][1], "SNES");
+        assertEquals(testObject[1][2], "Completed");
+        assertEquals(testObject[1][3], "10.0");
+    }
 }

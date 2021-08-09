@@ -9,11 +9,8 @@ import java.awt.event.ActionListener;
 
 public class LoadButton extends Button {
 
-    private GameLibraryApp gameLibApp;
-
     public LoadButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
         super(gameLibraryApp, panel, name);
-        gameLibApp = gameLibraryApp;
     }
 
     @Override

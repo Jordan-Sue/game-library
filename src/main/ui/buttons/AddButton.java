@@ -8,11 +8,8 @@ import java.awt.event.ActionListener;
 
 public class AddButton extends Button {
 
-    private GameLibraryApp gameLibApp;
-
     public AddButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
         super(gameLibraryApp, panel, name);
-        gameLibApp = gameLibraryApp;
     }
 
     @Override

@@ -9,11 +9,8 @@ import java.awt.event.ActionListener;
 
 public class RemoveButton extends Button {
 
-    private GameLibraryApp gameLibApp;
-
     public RemoveButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
         super(gameLibraryApp, panel, name);
-        gameLibApp = gameLibraryApp;
     }
 
     @Override
