@@ -12,7 +12,7 @@ public class Game implements Writable {
     private Status status;
     private double playTime;
 
-    // REQUIRES: name and system are not an empty string; status is one of the enum: Not_Played, Played, Beaten,
+    // REQUIRES: status is one of the enum: Not_Played, Played, Beaten,
     //           or Completed; playTime must be >= 0.
     // EFFECTS: sets the given parameters to the appropriate variables
     public Game(String name, String system, Status status, double playTime) {
@@ -22,14 +22,12 @@ public class Game implements Writable {
         this.playTime = playTime;
     }
 
-    // REQUIRES: newStatus must be one of the strings: Not Played, Played, Beaten, Completed
     // MODIFIES: this
     // EFFECTS: changes the current status of the game to the given status
     public void changeStatus(Status status) {
         this.status = status;
     }
 
-    // REQUIRES: newPlayTime must be >= 0
     // MODIFIES: this
     // EFFECTS: changes the current playTime to the newPlayTime
     public void changePlayTime(double newPlayTime) {

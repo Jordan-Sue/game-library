@@ -1,6 +1,5 @@
 package ui;
 
-import exceptions.NegativePlayTimeException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -122,15 +121,14 @@ public class GameLibraryApp extends JFrame {
                 String system = systemInput.getText();
                 Status status = (Status) statusInput.getSelectedItem();
                 double playTime = Double.parseDouble(playTimeInput.getText());
-                gameLib.addGame(new Game(name, system, status, playTime));
                 if (playTime < 0) {
-                    throw new NegativePlayTimeException();
+                    negativePlayTimeError();
+                } else {
+                    gameLib.addGame(new Game(name, system, status, playTime));
+                    JOptionPane.showMessageDialog(this, "Game added");
                 }
             } catch (NumberFormatException e) {
                 invalidNumberError();
-
-            } catch (NegativePlayTimeException e) {
-                negativePlayTimeError();
             }
         }
     }
@@ -155,6 +153,7 @@ public class GameLibraryApp extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 gameLib.removeGame(game);
+                JOptionPane.showMessageDialog(this, "Game removed");
             }
         }
     }
@@ -223,7 +222,7 @@ public class GameLibraryApp extends JFrame {
         if (okCancel == JOptionPane.OK_OPTION) {
             Status newStatus = (Status) newStatusInput.getSelectedItem();
             game.changeStatus(newStatus);
-            JOptionPane.showMessageDialog(this, "Completion status changed successfully");
+            JOptionPane.showMessageDialog(this, "Completion status changed");
         }
     }
 
@@ -242,17 +241,13 @@ public class GameLibraryApp extends JFrame {
                 double newPlayTime = Double.parseDouble(newPlayTimeInput.getText());
 
                 if (newPlayTime < 0) {
-                    throw new NegativePlayTimeException();
+                    negativePlayTimeError();
                 } else {
                     game.changePlayTime(newPlayTime);
-                    JOptionPane.showMessageDialog(this, "Play time changed successfully");
+                    JOptionPane.showMessageDialog(this, "Play time changed");
                 }
-
             } catch (NumberFormatException e) {
                 invalidNumberError();
-
-            } catch (NegativePlayTimeException e) {
-                negativePlayTimeError();
             }
         }
     }
@@ -261,7 +256,7 @@ public class GameLibraryApp extends JFrame {
     // EFFECTS: display an error pop-up related to invalid inputs
     private void invalidNumberError() {
         JOptionPane.showMessageDialog(this,
-                "You did not enter a valid number for play time",
+                "Enter a valid number",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
@@ -278,7 +273,9 @@ public class GameLibraryApp extends JFrame {
     // MODIFIES: this
     // EFFECTS: displays all the games in the GameLibrary
     public void exploreLibrary() {
-        System.out.println("I can't explore");
+        JScrollPane scrollPane = new JScrollPane();
+        add(scrollPane);
+        scrollPane.setVisible(true);
     }
 
     // MODIFIES: this
@@ -302,7 +299,7 @@ public class GameLibraryApp extends JFrame {
     public void loadGameLibrary() {
         try {
             gameLib = jsonReader.read();
-            JOptionPane.showMessageDialog(this, "Successfully loaded Game Library from " + JSON_STORE);
+            JOptionPane.showMessageDialog(this, "Loaded Game Library from " + JSON_STORE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     "Unable to load from the file " + JSON_STORE,

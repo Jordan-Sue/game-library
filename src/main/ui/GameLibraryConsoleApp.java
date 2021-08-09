@@ -1,6 +1,5 @@
 package ui;
 
-import exceptions.NegativePlayTimeException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -210,7 +209,7 @@ public class GameLibraryConsoleApp {
     private void startChangeStatus(Game game) {
         showStatusMenu();
         game.changeStatus(processStatusMenu());
-        System.out.println("Status changed");
+        System.out.println("Completion status changed");
     }
 
     // MODIFIES: game
@@ -219,16 +218,15 @@ public class GameLibraryConsoleApp {
         try {
             double playTime = input.nextDouble();
             if (playTime < 0) {
-                throw new NegativePlayTimeException();
+                System.out.println("Cannot enter a negative play time");
+                input.nextLine();
+                startChangePlayTime(game);
+            } else {
+                game.changePlayTime(playTime);
+                input.nextLine();
             }
-            game.changePlayTime(playTime);
-            input.nextLine();
         } catch (InputMismatchException e) {
             System.out.println("Enter a valid number");
-            input.nextLine();
-            startChangePlayTime(game);
-        } catch (NegativePlayTimeException e) {
-            System.out.println("Cannot enter a negative play time");
             input.nextLine();
             startChangePlayTime(game);
         }
@@ -251,7 +249,7 @@ public class GameLibraryConsoleApp {
     private void startLoadGameLibrary() {
         try {
             gameLib = jsonReader.read();
-            System.out.println("Successfully loaded Game Library from " + JSON_STORE);
+            System.out.println("Loaded Game Library from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to load from the file " + JSON_STORE);
         }
