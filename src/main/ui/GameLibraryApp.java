@@ -8,14 +8,12 @@ import ui.buttons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-// Class implementation based on SimpleDrawingPlayerComplete
+// Class implementation based on SimpleDrawingPlayerComplete, JSON based on JsonSerializationDemo
 
-// Visual application for game library
+// Visual application for GameLibrary
 public class GameLibraryApp extends JFrame {
 
     private static final String JSON_STORE = "./data/gameLibrary.json";
@@ -23,11 +21,12 @@ public class GameLibraryApp extends JFrame {
     public static final int HEIGHT = 480;
 
     private JPanel panel;
+    private Status[] statuses;
     private GameLibrary gameLib;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    // EFFECTS: runs the visual game library application
+    // EFFECTS: runs the visual GameLibrary application
     public GameLibraryApp() {
         super("Game Library");
         init();
@@ -37,12 +36,13 @@ public class GameLibraryApp extends JFrame {
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes the game library
+    // EFFECTS: initializes the GameLibrary application
     private void init() {
         panel = new JPanel();
         gameLib = new GameLibrary();
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
+        statuses = new Status[]{Status.Not_Played, Status.Played, Status.Beaten, Status.Completed};
     }
 
     // MODIFIES: this
@@ -83,9 +83,9 @@ public class GameLibraryApp extends JFrame {
         add(panel, BorderLayout.SOUTH);
     }
 
+    // MODIFIES: this
     // EFFECTS: creates the pop-up dialogue box to add a game to the library
-    public void addGameDialogueBox() {
-        Status [] statuses = { Status.Not_Played, Status.Beaten, Status.Played, Status.Completed };
+    public void addGame() {
         JComboBox<Status> statusInput = new JComboBox<>(statuses);
         JTextField nameInput = new JTextField();
         JTextField systemInput = new JTextField();
@@ -99,24 +99,24 @@ public class GameLibraryApp extends JFrame {
         addPanel.add(new JLabel("System"));
         addPanel.add(systemInput);
 
-        addPanel.add(new JLabel("Status"));
+        addPanel.add(new JLabel("Completion Status"));
         addPanel.add(statusInput);
 
         addPanel.add(new JLabel("Play Time"));
         addPanel.add(playTimeInput);
 
-        int option = JOptionPane.showConfirmDialog(this,
+        int okCancel = JOptionPane.showConfirmDialog(this,
                 addPanel,
-                "Enter the details of the game you wish to add",
+                "Add Game",
                 JOptionPane.OK_CANCEL_OPTION);
-        processAddGame(option, nameInput, systemInput, statusInput, playTimeInput);
+        processAddGame(okCancel, nameInput, systemInput, statusInput, playTimeInput);
     }
 
-    // MODIFIES: this
-    // EFFECTS: processes the inputs from the addGameDialogueBox and adds the game to the gameLibrary
-    private void processAddGame(int option, JTextField nameInput, JTextField systemInput,
+    // MODIFIES: this, GameLib
+    // EFFECTS: processes the inputs from the addGame and adds the game to the GameLibrary
+    private void processAddGame(int okCancel, JTextField nameInput, JTextField systemInput,
                                 JComboBox<Status> statusInput, JTextField playTimeInput) {
-        if (option == JOptionPane.OK_OPTION) {
+        if (okCancel == JOptionPane.OK_OPTION) {
             try {
                 String name = nameInput.getText();
                 String system = systemInput.getText();
@@ -127,36 +127,161 @@ public class GameLibraryApp extends JFrame {
                     throw new NegativePlayTimeException();
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this,
-                        "You did not enter a valid number for play time",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                invalidNumberError();
+
             } catch (NegativePlayTimeException e) {
+                negativePlayTimeError();
+            }
+        }
+    }
+
+    // MODIFIES: this, gameLib
+    // EFFECTS: removes a game from the GameLibrary,
+    //          if the game isn't in the library show a pop-up that tells the user
+    public void removeGame() {
+        JTextField nameInput = new JTextField();
+        Object[] question = { "Enter the name of the game you wish to remove", nameInput };
+        int okCancel = JOptionPane.showConfirmDialog(this,
+                question,
+                "Remove Game",
+                JOptionPane.OK_CANCEL_OPTION);
+        if (okCancel == JOptionPane.OK_OPTION) {
+            String name = nameInput.getText();
+            Game game = gameLib.returnGame(name);
+            if (game == null) {
                 JOptionPane.showMessageDialog(this,
-                        "Cannot enter a negative play time",
+                        "That game isn't in your library",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
+            } else {
+                gameLib.removeGame(game);
             }
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a game from the game library
-    public void removeGame() {
-        System.out.println("I can't remove");
-    }
-
-    // EFFECTS: finds a game
+    // EFFECTS: finds a game in the GameLibrary,
+    //          if the game isn't in the library show a pop-up that tells the user
     public void findGame() {
-        System.out.println("I can't find");
+        JTextField nameInput = new JTextField();
+        Object[] question = { "Enter the name of the game you wish to find", nameInput };
+        int okCancel = JOptionPane.showConfirmDialog(this,
+                question,
+                "Find Game",
+                JOptionPane.OK_CANCEL_OPTION);
+        if (okCancel == JOptionPane.OK_OPTION) {
+            String name = nameInput.getText();
+            Game game = gameLib.returnGame(name);
+            if (game == null) {
+                JOptionPane.showMessageDialog(this,
+                        "That game isn't in your library",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                editGame(game);
+            }
+        }
     }
 
     // MODIFIES: this
-    // EFFECTS: displays all the games in the game library
+    // EFFECTS: edits either the play time or the status of the game based off of the users choice
+    private void editGame(Game game) {
+        Object[] options = { "Edit Completion Status", "Edit Play Time", "Cancel" };
+        int statusPlayCancel = JOptionPane.showOptionDialog(this,
+                "Found " + game.getName() + ".\nWould you like to edit its completion status or change its play time?",
+                "Edit Game",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                null);
+        switch (statusPlayCancel) {
+            case JOptionPane.YES_OPTION:
+                editStatus(game);
+                break;
+            case JOptionPane.NO_OPTION:
+                editPlayTime(game);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // MODIFIES: this, game
+    // EFFECTS: edits the status of the given game
+    private void editStatus(Game game) {
+        JComboBox<Status> newStatusInput = new JComboBox<>(statuses);
+        JPanel editStatusPanel = new JPanel(new GridLayout(0, 1));
+        editStatusPanel.add(new JLabel("Select a new status for " + game.getName()));
+        editStatusPanel.add(newStatusInput);
+
+        int okCancel = JOptionPane.showConfirmDialog(this,
+                editStatusPanel,
+                "Edit Completion Status",
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (okCancel == JOptionPane.OK_OPTION) {
+            Status newStatus = (Status) newStatusInput.getSelectedItem();
+            game.changeStatus(newStatus);
+            JOptionPane.showMessageDialog(this, "Completion status changed successfully");
+        }
+    }
+
+    // MODIFIES: this, game
+    // EFFECTS: edits the play time of the given game
+    private void editPlayTime(Game game) {
+        JTextField newPlayTimeInput = new JTextField();
+        Object[] question = {"Enter the new play time for " + game.getName(), newPlayTimeInput};
+        int okCancel = JOptionPane.showConfirmDialog(this,
+                question,
+                "Edit Play Time",
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (okCancel == JOptionPane.OK_OPTION) {
+            try {
+                double newPlayTime = Double.parseDouble(newPlayTimeInput.getText());
+
+                if (newPlayTime < 0) {
+                    throw new NegativePlayTimeException();
+                } else {
+                    game.changePlayTime(newPlayTime);
+                    JOptionPane.showMessageDialog(this, "Play time changed successfully");
+                }
+
+            } catch (NumberFormatException e) {
+                invalidNumberError();
+
+            } catch (NegativePlayTimeException e) {
+                negativePlayTimeError();
+            }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: display an error pop-up related to invalid inputs
+    private void invalidNumberError() {
+        JOptionPane.showMessageDialog(this,
+                "You did not enter a valid number for play time",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: display an error pop-up related to negative play time
+    private void negativePlayTimeError() {
+        JOptionPane.showMessageDialog(this,
+                "Cannot enter a negative play time",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: displays all the games in the GameLibrary
     public void exploreLibrary() {
         System.out.println("I can't explore");
     }
 
+    // MODIFIES: this
     // EFFECTS: saves current GameLibrary to a JSON file
     public void saveGameLibrary() {
         try {
@@ -172,7 +297,7 @@ public class GameLibraryApp extends JFrame {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, gameLib
     // EFFECTS: loads a GameLibrary from a file
     public void loadGameLibrary() {
         try {

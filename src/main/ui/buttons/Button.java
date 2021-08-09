@@ -6,7 +6,7 @@ import ui.GameLibraryApp;
 import javax.swing.*;
 import java.awt.*;
 
-// !!!
+// Represents a button that is displayed on the main menu
 public abstract class Button {
 
     protected JButton button;
@@ -18,15 +18,10 @@ public abstract class Button {
         size = button.getPreferredSize();
         button.setActionCommand(name.toLowerCase());
         createActionListener();
-        // createButtonSize(size);
         panel.add(button);
     }
 
     // MODIFIES: this
     // EFFECTS: creates an action listener for the button's function
     protected abstract void createActionListener();
-
-    // MODIFIES: this
-    // EFFECTS: sets the button's size
-    protected abstract void createButtonSize(Dimension size);
 }

@@ -25,9 +25,4 @@ public class SaveButton extends Button {
             }
         });
     }
-
-    @Override
-    protected void createButtonSize(Dimension size) {
-        button.setBounds(0,150, size.width, size.height);
-    }
 }

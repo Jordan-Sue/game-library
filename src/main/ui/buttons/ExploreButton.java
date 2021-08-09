@@ -25,9 +25,4 @@ public class ExploreButton extends Button {
             }
         });
     }
-
-    @Override
-    protected void createButtonSize(Dimension size) {
-        button.setBounds(100,75, size.width, size.height);
-    }
 }

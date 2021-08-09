@@ -25,9 +25,4 @@ public class LoadButton extends Button {
             }
         });
     }
-
-    @Override
-    protected void createButtonSize(Dimension size) {
-        button.setBounds(100,150, size.width, size.height);
-    }
 }

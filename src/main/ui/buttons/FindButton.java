@@ -25,9 +25,4 @@ public class FindButton extends Button {
             }
         });
     }
-
-    @Override
-    protected void createButtonSize(Dimension size) {
-        button.setBounds(0,75, size.width, size.height);
-    }
 }

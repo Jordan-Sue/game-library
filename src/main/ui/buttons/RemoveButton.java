@@ -25,9 +25,4 @@ public class RemoveButton extends Button {
             }
         });
     }
-
-    @Override
-    protected void createButtonSize(Dimension size) {
-        button.setBounds(100,0, size.width, size.height);
-    }
 }

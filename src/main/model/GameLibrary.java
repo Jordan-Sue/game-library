@@ -45,9 +45,15 @@ public class GameLibrary implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes the game at the given index
+    // EFFECTS: removes the game with the give name
     public void removeGame(String name) {
         gameLib.remove(returnGame(name));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes the game from the GameLibrary
+    public void removeGame(Game game) {
+        gameLib.remove(game);
     }
 
     // EFFECTS: returns the size of the list

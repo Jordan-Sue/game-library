@@ -48,10 +48,17 @@ class GameLibraryTest {
     }
 
     @Test
-    public void testRemoveGame() {
+    public void testRemoveGameName() {
         Game g = new Game("Super Mario World", "SNES", Status.Completed, 10);
         testGameLibrary.addGame(g);
         testGameLibrary.removeGame("Super Mario World");
+        assertEquals(0, testGameLibrary.size());
+    }
+    @Test
+    public void testRemoveGameGame() {
+        Game g = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        testGameLibrary.addGame(g);
+        testGameLibrary.removeGame(g);
         assertEquals(0, testGameLibrary.size());
     }
 }

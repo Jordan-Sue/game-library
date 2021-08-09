@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 // Class implementation and structure based on Teller Project, JSON based on JsonSerializationDemo
 
-// Console based application for game library
+// Console based application for GameLibrary
 public class GameLibraryConsoleApp {
     private static final String JSON_STORE = "./data/gameLibrary.json";
     private GameLibrary gameLib;
@@ -20,7 +20,7 @@ public class GameLibraryConsoleApp {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    // EFFECTS: runs the console game library application
+    // EFFECTS: runs the console GameLibrary application
     public GameLibraryConsoleApp() {
         runGameLibrary();
     }
@@ -52,7 +52,7 @@ public class GameLibraryConsoleApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes the game library
+    // EFFECTS: initializes the GameLibrary
     private void init() {
         gameLib = new GameLibrary();
         input = new Scanner(System.in);
@@ -97,7 +97,7 @@ public class GameLibraryConsoleApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a game to the game library
+    // EFFECTS: adds a game to the GameLibrary
     private void startAddGame() {
         System.out.println("\nEnter the name of the game:");
         String name = input.nextLine();
@@ -150,7 +150,7 @@ public class GameLibraryConsoleApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a game from the game library,
+    // EFFECTS: removes a game from the GameLibrary,
     //          otherwise the user is told the game is not in the library
     private void startRemoveGame() {
         System.out.println("\nWhich game do you want to remove?");
