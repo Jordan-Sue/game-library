@@ -10,7 +10,8 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-// Class implementation based on SimpleDrawingPlayerComplete, JSON based on JsonSerializationDemo
+// Class implementation based on SimpleDrawingPlayerComplete, JSON based on JsonSerializationDemo,
+// Image loading based off of TrafficLightGUI
 
 // Visual application for GameLibrary
 public class GameLibraryApp extends JFrame {
@@ -282,7 +283,7 @@ public class GameLibraryApp extends JFrame {
         scrollPane.setPreferredSize(size);
 
         JPanel explorePanel = new JPanel();
-        new SortButton(this, explorePanel, "Sort");
+        new SortButton(this, explorePanel, exploreFrame, "Sort");
         new StatsButton(this, explorePanel, "Stats");
 
         JSplitPane explorePane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, explorePanel);
@@ -293,9 +294,10 @@ public class GameLibraryApp extends JFrame {
     }
 
     // MODIFIES: explorePane
-    // EFFECTS: sorts the list of games displayed
-    public void sortGameLib() {
+    // EFFECTS: sorts the list of games displayed by alphabetical order
+    public void sortGameLib(JFrame frame) {
         gameLib.sort();
+        frame.setVisible(false);
         exploreLibrary();
     }
 

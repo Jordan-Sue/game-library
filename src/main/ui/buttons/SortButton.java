@@ -8,8 +8,11 @@ import java.awt.event.ActionListener;
 
 public class SortButton extends Button {
 
-    public SortButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
+    JFrame frame;
+
+    public SortButton(GameLibraryApp gameLibraryApp, JPanel panel, JFrame frame, String name) {
         super(gameLibraryApp, panel, name);
+        this.frame = frame;
     }
 
     @Override
@@ -17,7 +20,7 @@ public class SortButton extends Button {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameLibApp.sortGameLib();
+                gameLibApp.sortGameLib(frame);
             }
         });
     }
