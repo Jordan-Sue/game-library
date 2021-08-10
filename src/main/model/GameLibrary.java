@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 // JSON related methods based on JsonSerializationDemo
 
@@ -44,6 +45,11 @@ public class GameLibrary implements Writable {
         return null;
     }
 
+    // EFFECTS: returns the game at the given index
+    public Game getGame(int index) {
+        return gameLib.get(index);
+    }
+
     // MODIFIES: this
     // EFFECTS: removes the game with the give name
     public void removeGame(String name) {
@@ -75,6 +81,21 @@ public class GameLibrary implements Writable {
             counter += 1;
         }
         return games;
+    }
+
+    // EFFECTS: returns true if there is a completed game in the GameLibrary
+    public boolean isComplete() {
+        for (Game g : gameLib) {
+            if (g.getStatus() == Status.Completed) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // EFFECTS: sorts the game library by alphabetical order of each game's name
+    public void sort() {
+        Collections.sort(gameLib);
     }
 
     @Override

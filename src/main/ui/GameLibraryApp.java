@@ -286,7 +286,7 @@ public class GameLibraryApp extends JFrame {
         new StatsButton(this, explorePanel, "Stats");
 
         JSplitPane explorePane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, explorePanel);
-        explorePane.setDividerLocation(exploreFrame.getHeight() / 2);
+        explorePane.setDividerLocation(exploreFrame.getHeight() - 85);
 
         exploreFrame.add(explorePane);
         exploreFrame.setVisible(true);
@@ -295,13 +295,25 @@ public class GameLibraryApp extends JFrame {
     // MODIFIES: explorePane
     // EFFECTS: sorts the list of games displayed
     public void sortGameLib() {
-
+        gameLib.sort();
+        exploreLibrary();
     }
 
-    // MODIFIES: exploreFrame
-    // EFFECTS: displays a graph of the games based on completion status
+    // MODIFIES: this
+    // EFFECTS: displays a congratulation image if there is a completed game in the GameLibrary,
+    //          otherwise tells the user that there is no completed game
     public void showStats() {
-
+        if (gameLib.isComplete()) {
+            String sep = System.getProperty("file.separator");
+            ImageIcon congrats = new ImageIcon(System.getProperty("user.dir") + sep + "images" + sep + "congrats.png");
+            JOptionPane.showMessageDialog(this,
+                    "You have a completed game!",
+                    "Congratulations!",
+                    JOptionPane.PLAIN_MESSAGE,
+                    congrats);
+        } else {
+            JOptionPane.showMessageDialog(this, "You have no completed games");
+        }
     }
 
     // MODIFIES: this

@@ -78,4 +78,26 @@ class GameLibraryTest {
         assertEquals(testObject[1][2], "Completed");
         assertEquals(testObject[1][3], "10.0");
     }
+
+    @Test
+    public void testIsComplete() {
+        Game g1 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
+        Game g2 = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        testGameLibrary.addGame(g1);
+        assertFalse(testGameLibrary.isComplete());
+
+        testGameLibrary.addGame(g2);
+        assertTrue(testGameLibrary.isComplete());
+    }
+
+    @Test
+    public void testSort() {
+        Game g1 = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        Game g2 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
+        testGameLibrary.addGame(g1);
+        testGameLibrary.addGame(g2);
+        testGameLibrary.sort();
+        assertEquals(testGameLibrary.getGame(0).getName(), "Super Mario Bros.");
+        assertEquals(testGameLibrary.getGame(1).getName(), "Super Mario World");
+    }
 }
