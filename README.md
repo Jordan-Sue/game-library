@@ -28,3 +28,6 @@ that I would use in real life.
 - As a user, I want to see if I have a game in my library
 - As a user, I want to save my game library to a file 
 - As a user, I want to load my game library from a file
+
+## Phase 4: Task 2
+- Type hierarchy: all the buttons in the buttons package within the ui package

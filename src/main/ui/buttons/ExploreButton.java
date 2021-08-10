@@ -18,7 +18,7 @@ public class ExploreButton extends Button {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameLibApp.exploreLibrary();
+                gameLibApp.exploreLibrary(new JFrame());
             }
         });
     }

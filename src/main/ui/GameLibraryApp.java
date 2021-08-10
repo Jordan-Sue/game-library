@@ -265,9 +265,10 @@ public class GameLibraryApp extends JFrame {
 
     // MODIFIES: this
     // EFFECTS: displays all the games in the GameLibrary
-    public void exploreLibrary() {
+    public void exploreLibrary(JFrame exploreFrame) {
         setVisible(false);
-        JFrame exploreFrame = new JFrame();
+        exploreFrame.getContentPane().removeAll();
+        exploreFrame.revalidate();
         exploreFrame.setLayout(new BorderLayout());
         exploreFrame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         exploreFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -278,9 +279,6 @@ public class GameLibraryApp extends JFrame {
         JTable gameLibTable = new JTable(games, columnNames);
         gameLibTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         JScrollPane scrollPane = new JScrollPane(gameLibTable);
-        Dimension size = new Dimension(exploreFrame.getWidth(),
-                (exploreFrame.getHeight() - (exploreFrame.getHeight() / 4)));
-        scrollPane.setPreferredSize(size);
 
         JPanel explorePanel = new JPanel();
         new SortButton(this, explorePanel, exploreFrame, "Sort");
@@ -295,10 +293,9 @@ public class GameLibraryApp extends JFrame {
 
     // MODIFIES: explorePane
     // EFFECTS: sorts the list of games displayed by alphabetical order
-    public void sortGameLib(JFrame frame) {
+    public void sortGameLib(JFrame exploreFrame) {
         gameLib.sort();
-        frame.setVisible(false);
-        exploreLibrary();
+        exploreLibrary(exploreFrame);
     }
 
     // MODIFIES: this
