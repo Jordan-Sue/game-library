@@ -4,13 +4,11 @@ package ui.buttons;
 import ui.GameLibraryApp;
 
 import javax.swing.*;
-import java.awt.*;
 
-// Represents a button that is displayed on the main menu
+// Represents a button that is displayed on a panel
 public abstract class Button {
 
     protected JButton button;
-    protected Dimension size;
     protected GameLibraryApp gameLibApp;
 
 
@@ -18,7 +16,6 @@ public abstract class Button {
     public Button(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
         gameLibApp = gameLibraryApp;
         button = new JButton(name);
-        size = button.getPreferredSize();
         button.setActionCommand(name.toLowerCase());
         createActionListener();
         panel.add(button);

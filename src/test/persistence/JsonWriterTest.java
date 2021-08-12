@@ -19,6 +19,8 @@ class JsonWriterTest extends JsonTest{
             GameLibrary gameLib = new GameLibrary();
             JsonWriter writer = new JsonWriter("./data/i\1egalName.json");
             writer.open();
+            writer.write(gameLib);
+            writer.close();
             fail("Should have thrown exception");
         } catch (IOException e) {
             // Should be thrown

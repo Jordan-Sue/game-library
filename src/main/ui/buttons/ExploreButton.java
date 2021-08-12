@@ -3,10 +3,10 @@ package ui.buttons;
 import ui.GameLibraryApp;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// explore your library button
 public class ExploreButton extends Button {
 
     public ExploreButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {

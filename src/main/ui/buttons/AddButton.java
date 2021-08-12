@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// add game button
 public class AddButton extends Button {
 
     public AddButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {

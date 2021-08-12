@@ -30,4 +30,8 @@ that I would use in real life.
 - As a user, I want to load my game library from a file
 
 ## Phase 4: Task 2
-- Type hierarchy: all the buttons in the buttons package within the ui package
+Type hierarchy: all of the buttons in the buttons package within the ui package
+
+## Phase 4: Task 3
+- I would refactor the construction of the frames in GameLibraryApp
+- Both the main window and the explore window use almost identical code when constructing them

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// stats button
 public class StatsButton extends Button {
 
     public StatsButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
