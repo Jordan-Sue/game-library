@@ -23,6 +23,7 @@ public class GameLibraryApp extends JFrame {
     private JPanel panel;
     private Status[] statuses;
     private GameLibrary gameLib;
+    private JFrame exploreFrame;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
@@ -30,7 +31,8 @@ public class GameLibraryApp extends JFrame {
     public GameLibraryApp() {
         super("Game Library");
         init();
-        initializeGraphics();
+        initializeWindows(this);
+        initializeWindows(exploreFrame);
         initializeMainMenu();
         setVisible(true);
     }
@@ -40,6 +42,7 @@ public class GameLibraryApp extends JFrame {
     private void init() {
         panel = new JPanel();
         gameLib = new GameLibrary();
+        exploreFrame = new JFrame();
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         statuses = new Status[]{Status.Not_Played, Status.Played, Status.Beaten, Status.Completed};
@@ -47,11 +50,11 @@ public class GameLibraryApp extends JFrame {
 
     // MODIFIES: this
     // EFFECTS: draws the JFrame window where this GameLibrary will operate
-    private void initializeGraphics() {
-        setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Have to change for pop up "are you sure?" ???
-        setLocationRelativeTo(null);
+    private void initializeWindows(JFrame frame) {
+        frame.setLayout(new BorderLayout());
+        frame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
     }
 
     // MODIFIES: this
@@ -265,24 +268,23 @@ public class GameLibraryApp extends JFrame {
 
     // MODIFIES: this
     // EFFECTS: displays all the games in the GameLibrary
-    public void exploreLibrary(JFrame exploreFrame) {
-        setVisible(false);
+    public void exploreLibrary() {
+        this.setVisible(false);
         exploreFrame.getContentPane().removeAll();
-        exploreFrame.revalidate();
-        exploreFrame.setLayout(new BorderLayout());
-        exploreFrame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        exploreFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        exploreFrame.setLocationRelativeTo(null);
+//        exploreFrame.revalidate();
+//        exploreFrame.repaint();
 
         Object[][] games = gameLib.getGamesInfo();
         String[] columnNames = { "Name", "System", "Completion Status", "Playtime" };
         JTable gameLibTable = new JTable(games, columnNames);
         gameLibTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        gameLibTable.setDefaultEditor(Object.class, null);
         JScrollPane scrollPane = new JScrollPane(gameLibTable);
 
         JPanel explorePanel = new JPanel();
         new SortButton(this, explorePanel, exploreFrame, "Sort");
         new StatsButton(this, explorePanel, "Stats");
+        new BackButton(this, explorePanel, exploreFrame, "Main Menu");
 
         JSplitPane explorePane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, explorePanel);
         explorePane.setDividerLocation(exploreFrame.getHeight() - 85);
@@ -295,7 +297,7 @@ public class GameLibraryApp extends JFrame {
     // EFFECTS: sorts the list of games displayed by alphabetical order
     public void sortGameLib(JFrame exploreFrame) {
         gameLib.sort();
-        exploreLibrary(exploreFrame);
+        exploreLibrary();
     }
 
     // MODIFIES: this

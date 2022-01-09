@@ -9,11 +9,11 @@ import java.awt.event.ActionListener;
 // sort button
 public class SortButton extends Button {
 
-    JFrame frame;
+    JFrame exploreFrame;
 
-    public SortButton(GameLibraryApp gameLibraryApp, JPanel panel, JFrame frame, String name) {
+    public SortButton(GameLibraryApp gameLibraryApp, JPanel panel, JFrame exploreFrame, String name) {
         super(gameLibraryApp, panel, name);
-        this.frame = frame;
+        this.exploreFrame = exploreFrame;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class SortButton extends Button {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameLibApp.sortGameLib(frame);
+                gameLibApp.sortGameLib(exploreFrame);
             }
         });
     }

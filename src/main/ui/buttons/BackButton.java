@@ -6,11 +6,14 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// explore your library button
-public class ExploreButton extends Button {
+// return to the main menu
+public class BackButton extends Button {
 
-    public ExploreButton(GameLibraryApp gameLibraryApp, JPanel panel, String name) {
+    JFrame exploreFrame;
+
+    public BackButton(GameLibraryApp gameLibraryApp, JPanel panel, JFrame exploreFrame, String name) {
         super(gameLibraryApp, panel, name);
+        this.exploreFrame = exploreFrame;
     }
 
     @Override
@@ -18,7 +21,8 @@ public class ExploreButton extends Button {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameLibApp.exploreLibrary();
+                exploreFrame.setVisible(false);
+                gameLibApp.setVisible(true);
             }
         });
     }
