@@ -91,13 +91,64 @@ class GameLibraryTest {
     }
 
     @Test
-    public void testSort() {
+    public void testSortName() {
         Game g1 = new Game("Super Mario World", "SNES", Status.Completed, 10);
         Game g2 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
         testGameLibrary.addGame(g1);
         testGameLibrary.addGame(g2);
-        testGameLibrary.sort();
+        testGameLibrary.sortName();
         assertEquals(testGameLibrary.getGame(0).getName(), "Super Mario Bros.");
         assertEquals(testGameLibrary.getGame(1).getName(), "Super Mario World");
+    }
+
+    @Test
+    public void testSortSystem() {
+        Game g1 = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        Game g2 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
+        Game g3 = new Game("Journey to Silius", "NES", Status.Beaten, 15);
+        Game g4 = new Game("Tetris", "NES", Status.Played, 5);
+        testGameLibrary.addGame(g1);
+        testGameLibrary.addGame(g2);
+        testGameLibrary.addGame(g3);
+        testGameLibrary.addGame(g4);
+        testGameLibrary.sortSystem();
+        assertEquals(testGameLibrary.getGame(0).getName(), "Journey to Silius");
+        assertEquals(testGameLibrary.getGame(1).getName(), "Super Mario Bros.");
+        assertEquals(testGameLibrary.getGame(2).getName(), "Tetris");
+        assertEquals(testGameLibrary.getGame(3).getName(), "Super Mario World");
+    }
+
+    @Test
+    public void testSortStatus() {
+        Game g1 = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        Game g2 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
+        Game g3 = new Game("Metroid Dread", "Switch", Status.Not_Played, 0);
+        Game g4 = new Game("Tetris", "NES", Status.Played, 5);
+        testGameLibrary.addGame(g1);
+        testGameLibrary.addGame(g2);
+        testGameLibrary.addGame(g3);
+        testGameLibrary.addGame(g4);
+        testGameLibrary.sortStatus();
+        assertEquals(testGameLibrary.getGame(0).getName(), "Metroid Dread");
+        assertEquals(testGameLibrary.getGame(1).getName(), "Super Mario Bros.");
+        assertEquals(testGameLibrary.getGame(2).getName(), "Tetris");
+        assertEquals(testGameLibrary.getGame(3).getName(), "Super Mario World");
+    }
+
+    @Test
+    public void testSortTime() {
+        Game g1 = new Game("Super Mario World", "SNES", Status.Completed, 10);
+        Game g2 = new Game("Super Mario Bros.", "NES", Status.Not_Played, 0);
+        Game g3 = new Game("Metroid Dread", "Switch", Status.Not_Played, 0);
+        Game g4 = new Game("Wrecking Crew", "NES", Status.Not_Played, 0);
+        testGameLibrary.addGame(g1);
+        testGameLibrary.addGame(g2);
+        testGameLibrary.addGame(g3);
+        testGameLibrary.addGame(g4);
+        testGameLibrary.sortTime();
+        assertEquals(testGameLibrary.getGame(0).getName(), "Metroid Dread");
+        assertEquals(testGameLibrary.getGame(1).getName(), "Super Mario Bros.");
+        assertEquals(testGameLibrary.getGame(2).getName(), "Wrecking Crew");
+        assertEquals(testGameLibrary.getGame(3).getName(), "Super Mario World");
     }
 }

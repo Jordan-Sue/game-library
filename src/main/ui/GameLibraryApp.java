@@ -7,8 +7,11 @@ import ui.buttons.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 // Class implementation based on SimpleDrawingPlayerComplete, JSON based on JsonSerializationDemo,
 // Image loading based off of TrafficLightGUI
@@ -45,15 +48,29 @@ public class GameLibraryApp extends JFrame {
         exploreFrame = new JFrame();
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
-        statuses = new Status[]{Status.Not_Played, Status.Played, Status.Beaten, Status.Completed};
+        statuses = new Status[] {Status.Not_Played, Status.Played, Status.Beaten, Status.Completed};
     }
 
-    // MODIFIES: this
-    // EFFECTS: draws the JFrame window where this GameLibrary will operate
+    // MODIFIES: frame
+    // EFFECTS: draws a JFrame window that has a conformation dialogue box on close
     private void initializeWindows(JFrame frame) {
         frame.setLayout(new BorderLayout());
         frame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirmExit = JOptionPane.showConfirmDialog(frame,
+                        "Are you sure you want to exit?\nMake sure you've saved any changes.",
+                        "Confirm Exit?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+
+                if (confirmExit == JOptionPane.YES_OPTION) {
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
+            }
+        });
         frame.setLocationRelativeTo(null);
     }
 
@@ -107,7 +124,7 @@ public class GameLibraryApp extends JFrame {
         processAddGame(okCancel, nameInput, systemInput, statusInput, playTimeInput);
     }
 
-    // MODIFIES: this, GameLib
+    // MODIFIES: this, gameLib
     // EFFECTS: processes the inputs from the addGame and adds the game to the GameLibrary
     private void processAddGame(int okCancel, JTextField nameInput, JTextField systemInput,
                                 JComboBox<Status> statusInput, JTextField playTimeInput) {
@@ -266,7 +283,7 @@ public class GameLibraryApp extends JFrame {
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    // MODIFIES: this
+    // MODIFIES: exploreFrame
     // EFFECTS: displays all the games in the GameLibrary
     public void exploreLibrary() {
         this.setVisible(false);
@@ -294,20 +311,45 @@ public class GameLibraryApp extends JFrame {
     }
 
     // MODIFIES: explorePane
-    // EFFECTS: sorts the list of games displayed by alphabetical order
-    public void sortGameLib(JFrame exploreFrame) {
-        gameLib.sort();
+    // EFFECTS: creates a pop-up to determine which criteria to sort the GameLibrary by
+    public void sortGameLib() {
+        String[] possibilities = {"Name", "System", "Completion Status", "Play Time"};
+        String s = (String)JOptionPane.showInputDialog(
+                exploreFrame,
+                "Sort by:",
+                "Sort",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                possibilities,
+                "Name");
+        processSortGameLib(s);
+    }
+
+    // MODIFIES: explorePane
+    // EFFECTS: sorts the GameLibrary based on the given criteria
+    private void processSortGameLib(String sortBy) {
+        if (Objects.equals(sortBy, "Name")) {
+            gameLib.sortName();
+        } else if (Objects.equals(sortBy, "System")) {
+            gameLib.sortSystem();
+        } else if (Objects.equals(sortBy, "Completion Status")) {
+            gameLib.sortStatus();
+        } else if (Objects.equals(sortBy, "Play Time")) {
+            gameLib.sortTime();
+        }
+
         exploreLibrary();
     }
 
-    // MODIFIES: this
+    // MODIFIES: exploreFrame
     // EFFECTS: displays a congratulation image if there is a completed game in the GameLibrary,
     //          otherwise tells the user that there is no completed game
     public void showStats() {
         if (gameLib.isComplete()) {
             String sep = System.getProperty("file.separator");
             ImageIcon congrats = new ImageIcon(System.getProperty("user.dir") + sep + "images" + sep + "congrats.png");
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(
+                    this,
                     "You have a completed game!",
                     "Congratulations!",
                     JOptionPane.PLAIN_MESSAGE,
@@ -326,7 +368,8 @@ public class GameLibraryApp extends JFrame {
             jsonWriter.close();
             JOptionPane.showMessageDialog(this, "Saved Game Library to " + JSON_STORE);
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(
+                    this,
                     "Unable to write to the file " + JSON_STORE,
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -340,7 +383,8 @@ public class GameLibraryApp extends JFrame {
             gameLib = jsonReader.read();
             JOptionPane.showMessageDialog(this, "Loaded Game Library from " + JSON_STORE);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(
+                    this,
                     "Unable to load from the file " + JSON_STORE,
                     "Error",
                     JOptionPane.ERROR_MESSAGE);

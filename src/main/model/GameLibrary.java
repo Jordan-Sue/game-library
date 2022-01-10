@@ -5,14 +5,14 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 
 // JSON related methods based on JsonSerializationDemo
 
 // A list of game objects
 public class GameLibrary implements Writable {
     private ArrayList<Game> gameLib;
-    // private String owner;
+    // private String owner; !!!
 
     // EFFECTS: creates an empty list of games
     public GameLibrary() {
@@ -93,9 +93,60 @@ public class GameLibrary implements Writable {
         return false;
     }
 
-    // EFFECTS: sorts the game library by alphabetical order of each game's name
-    public void sort() {
-        Collections.sort(gameLib);
+    // EFFECTS: sorts the GameLibrary alphabetical by name
+    public void sortName() {
+        gameLib.sort(new Comparator<Game>() {
+            @Override
+            public int compare(Game o1, Game o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+    }
+
+    // EFFECTS: sorts the GameLibrary alphabetical by system, then alphabetically by name
+    public void sortSystem() {
+        gameLib.sort(new Comparator<Game>() {
+            @Override
+            public int compare(Game o1, Game o2) {
+                int systemEqual = o1.getSystem().compareToIgnoreCase(o2.getSystem());
+                if (systemEqual == 0) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                } else {
+                    return systemEqual;
+                }
+            }
+        });
+    }
+
+    // EFFECTS: sorts the GameLibrary by completion status from the least completion (Not Played)
+    //          to most completion (Completed), then alphabetically by name
+    public void sortStatus() {
+        gameLib.sort(new Comparator<Game>() {
+            @Override
+            public int compare(Game o1, Game o2) {
+                int statusEqual = o1.getStatus().compareTo(o2.getStatus());
+                if (statusEqual == 0) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                } else {
+                    return statusEqual;
+                }
+            }
+        });
+    }
+
+    // EFFECTS: sorts the GameLibrary from the lowest play time to highest, then alphabetically by name
+    public void sortTime() {
+        gameLib.sort(new Comparator<Game>() {
+            @Override
+            public int compare(Game o1, Game o2) {
+                int playTimeEqual = Double.compare(o1.getPlayTime(), o2.getPlayTime());
+                if (playTimeEqual == 0) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                } else {
+                    return playTimeEqual;
+                }
+            }
+        });
     }
 
     @Override

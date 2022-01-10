@@ -6,7 +6,7 @@ import persistence.Writable;
 // JSON related methods based on JsonSerializationDemo
 
 // Represents a game that has a name, a system, a completion status, and a play time
-public class Game implements Writable, Comparable<Game> {
+public class Game implements Writable {
     private String name;
     private String system;
     private Status status;
@@ -63,10 +63,5 @@ public class Game implements Writable, Comparable<Game> {
         json.put("playTime", playTime);
 
         return json;
-    }
-
-    @Override
-    public int compareTo(Game o) {
-        return this.getName().compareTo(o.getName());
     }
 }
